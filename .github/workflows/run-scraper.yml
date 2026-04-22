@@ -1,0 +1,50 @@
+name: Run scraper
+
+on:
+  workflow_dispatch:
+    inputs:
+      apify_token:
+        description: 'Apify API token (apify_api_...). Masks automatically.'
+        required: true
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: claude/setup-maps-scraper-K4VHZ
+
+      - name: Mask token in logs
+        run: echo "::add-mask::${{ inputs.apify_token }}"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: maps-scraper
+        run: npm ci
+
+      - name: Prepare Desktop dir
+        run: mkdir -p "$HOME/Desktop"
+
+      - name: Run scraper
+        working-directory: maps-scraper
+        env:
+          APIFY_TOKEN: ${{ inputs.apify_token }}
+        run: node index.js
+
+      - name: Upload CSV + checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: impressive_leads
+          path: |
+            ~/Desktop/impressive_leads.csv
+            maps-scraper/checkpoints/
+          if-no-files-found: warn
+          retention-days: 30
