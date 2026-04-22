@@ -1,0 +1,15 @@
+{
+  "name": "impressive-leads-scraper",
+  "version": "1.0.0",
+  "description": "Google Maps + Website Contact scraper for Swedish B2B leads via Apify",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "leads": "node index.js"
+  },
+  "keywords": ["apify", "scraper", "google-maps", "leads", "sweden"],
+  "license": "MIT",
+  "dependencies": {
+    "apify-client": "^2.23.0"
+  }
+}

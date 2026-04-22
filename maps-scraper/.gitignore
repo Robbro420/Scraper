@@ -1,0 +1,4 @@
+node_modules/
+checkpoints/
+.env
+*.log
