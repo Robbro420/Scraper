@@ -290,7 +290,19 @@ function writeCsv(websites, hostToEmails, outPath) {
 
     log('Klart.');
   } catch (err) {
-    console.error('\n[FEL]', err && err.stack ? err.stack : err);
+    console.error('\n========== [FEL] ==========');
+    if (err && err.message) console.error('Meddelande:', err.message);
+    if (err && err.type) console.error('Typ:', err.type);
+    if (err && err.statusCode) console.error('HTTP-status:', err.statusCode);
+    if (err && err.clientMethod) console.error('Klientmetod:', err.clientMethod);
+    if (err && err.attempt) console.error('Försök:', err.attempt);
+    if (err && err.data) {
+      try { console.error('Data:', JSON.stringify(err.data, null, 2)); }
+      catch { console.error('Data:', err.data); }
+    }
+    if (err && err.stack) console.error('\nStack:\n' + err.stack);
+    else console.error('Raw:', err);
+    console.error('===========================\n');
     process.exit(1);
   }
 })();
